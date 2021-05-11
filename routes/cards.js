@@ -26,6 +26,9 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET_ENCODIN
 // Get all the cards - DEV PURPOSES ONLY!!
 router.get('/all', cardsController.getAll);
 
+// Get a singel card by its ID
+router.get('/:card_id', cardsController.getOneByID);
+
 // Get all the cards associated with a specific column
 protectedRouter.get('/column/:column_id', cardsController.getAllByColumnID);
 

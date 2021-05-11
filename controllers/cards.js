@@ -6,6 +6,11 @@ const cardsController = {
     res.json(allCards);
   },
 
+  getOneByID: async (req,res) => {
+    let foundCard = await CardModel.find(eq.params.card_id).populate("column");
+    res.json(foundCard);
+  },
+
   getAllByColumnID: async(req, res) => {
     let foundCards = await CardModel.find({column: req.params.column_id});
     res.json({foundCards});
