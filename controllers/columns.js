@@ -12,10 +12,12 @@ const ColumnsController = {
   },
 
   createOneByBoardID: async (req, res) => {
-    let order = await ColumnModel.find().populate("boards"); //Finds the number of existing columns
+    let ColumnsAlreadyInBoard = await ColumnModel.find({board: req.params.board_id});
+    let numberOfColumnsAlreadyInBoard = ColumnsAlreadyInBoard.length;
+    let order = numberOfColumnsAlreadyInBoard + 1;
     let newColumn = new ColumnModel(req.body);
-    newColumn.board = req.params.board_id; // don't actually need params because user info is held in auth token and this is a protected route
-    newColumn.order = order.length + 1; //Increases the order by one
+    newColumn.board = req.params.board_id; 
+    newColumn.order = order;
     await newColumn.save();
     res.json({ newColumn });
   },
