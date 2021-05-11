@@ -9,7 +9,7 @@ const boardsController = {
   getAllByUserID: async(req, res, next) => {
     const token = res.locals.decoded;
     console.log(token)
-    let allBoards = await BoardModel.find({user: token.user._id});
+    let userBoards = await BoardModel.find({user: token.user._id});
     res.json({userBoards});
   },
   
