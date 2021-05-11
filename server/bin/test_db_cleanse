@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+
+const mongoose = require('mongoose');
+
+// set up Mongoose server connection
+mongoose.connect(process.env.DATABASE_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+// create error message if DB can't connect
+const db = mongoose.connection;
+db.on('error', error => console.error(error));
+
+// create console message on first connection
+db.once('open', () => console.log('Connected to database'));
+
+db.db.dropDatabase();
+
+
