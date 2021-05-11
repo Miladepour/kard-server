@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const usersController = {
-  Create: async (req, res) => {
+  Create: async (req, res, next) => {
     const { firstName, lastName, email, password } = req.body;
     
     const userExists = await UserModel.findOne({ email });
@@ -32,7 +32,7 @@ const usersController = {
   }
   },
 
-  Login: async (req, res) => {
+  Login: async (req, res, next) => {
     const { email, password } = req.body;
     const user = await UserModel.findOne({
       email
@@ -74,7 +74,7 @@ const usersController = {
     });
   }, 
   
-  getOneByID: async (req, res) => {
+  getOneByID: async (req, res, next) => {
     const user = await UserModel.findOne({
       user_id: req.params._id
     });

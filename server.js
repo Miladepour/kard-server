@@ -1,5 +1,6 @@
 // require libraries and initialize Express app
 const express = require('express');
+var cors = require('cors');
 const app = express();
 
 //tell Express which routers will be needed
@@ -7,6 +8,9 @@ const boardsRouter = require('./routes/boards');
 const cardsRouter = require('./routes/cards');
 const columnsRouter = require('./routes/columns');
 const usersRouter = require('./routes/users');
+
+// Use CORS to allow this Heroku-hosted API server to be queried from other domains
+app.use(cors());
 
 // Parse request body as JSON
 app.use(express.urlencoded({ extended: true }));
