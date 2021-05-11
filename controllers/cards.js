@@ -7,7 +7,7 @@ const cardsController = {
   },
 
   getOneByID: async (req,res) => {
-    let foundCard = await CardModel.find(eq.params.card_id).populate("column");
+    let foundCard = await CardModel.find(req.params.card_id).populate("column");
     res.json(foundCard);
   },
 
