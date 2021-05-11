@@ -17,10 +17,12 @@ const cardsController = {
   },
   
   createOneByColumnID: async(req, res) => {
-    let order = await CardModel.find().populate("boards"); //Finds the number of existing cards
+    let CardsAlreadyInColumn = await CardModel.find({column: req.params.column_id});
+    let numberOfCardsAlreadyInColumn = CardsAlreadyInColumn.length;
+    let order = numberOfCardsAlreadyInColumn + 1;
     let newCard = new CardModel(req.body);
     newCard.column = req.params.column_id; 
-    newCard.order = order.length + 1; //Increases the order by one
+    newCard.order = order;
     await newCard.save();
     res.json({ newCard });
   },
