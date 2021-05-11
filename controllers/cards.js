@@ -2,12 +2,12 @@ const CardModel = require('../models/card')
 
 const cardsController = {
   getAll: async (req,res) => {
-    let allCards = await CardModel.find().populate("column") // note the populate is needed in order to be able to name the user with anything other than their _id
+    let allCards = await CardModel.find().populate("column") 
     res.json(allCards);
   },
 
   getOneByID: async (req,res) => {
-    let foundCard = await CardModel.find(req.params.card_id).populate("column");
+    let foundCard = await CardModel.findById(req.params.card_id).populate("column") 
     res.json(foundCard);
   },
 

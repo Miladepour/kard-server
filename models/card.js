@@ -12,7 +12,7 @@ const cardSchema = new Schema({
         required: true
     },
     order: {
-        type: String,
+        type: Number,
         required: true
     }
 },
