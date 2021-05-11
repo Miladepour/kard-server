@@ -1,19 +1,19 @@
 const BoardModel = require('../models/board')
 
 const boardsController = {
-  getAll: async (req,res) => {
+  getAll: async (req,res, next) => {
     let allBoards = await BoardModel.find().populate("user") // note the populate is needed in order to be able to name the user with anything other than their _id
     res.json(allBoards);
   },
 
-  getAllByUserID: async(req, res) => {
+  getAllByUserID: async(req, res, next) => {
     const token = res.locals.decoded;
     console.log(token)
     let allBoards = await BoardModel.find({user: token.user._id});
-    res.json({allBoards});
+    res.json({userBoards});
   },
   
-  createOneByUserID: async(req, res) => {
+  createOneByUserID: async(req, res, next) => {
     const token = res.locals.decoded;
 
     let newBoard = new BoardModel(req.body);
@@ -22,7 +22,7 @@ const boardsController = {
     res.json({newBoard});
   },
   
-  deleteOneById: async(req, res) => { 
+  deleteOneById: async(req, res, next) => { 
     BoardModel.findByIdAndDelete(req.params.board_id).then((board) => {
       if (!board) {
         return res.status(404).send();
@@ -33,7 +33,7 @@ const boardsController = {
       })
   },
   
-  changeNameById: async(req, res) => {
+  changeNameById: async(req, res, next) => {
     // {new: true} gets us back the updated version of the document rather than the info prior to making the change
     BoardModel.findByIdAndUpdate(req.params.board_id, req.body, {new: true}).then((board) => { 
         if (!board) {
