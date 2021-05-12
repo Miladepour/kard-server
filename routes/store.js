@@ -3,7 +3,7 @@ const router = express.Router();
 //middleware for using protected routes 
 const { withJWTAuthMiddleware } = require("express-kun");
 
-const storeController = require('../controllers/boards');
+const storeController = require('../controllers/store');
 
 // helper function which checks there's an 'authorization' header in the body of a request
 // and that it follows the expected 'Bearer [token]' format for its value.
@@ -25,6 +25,6 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET_ENCODIN
 
 
 // Get all the data relevant to the logged-in user, so that front end can consume when initializing board states
-protectedRouter.get('/', storeController.getAllByUserID);
+protectedRouter.get('/', storeController.getAll);
 
 module.exports = router;

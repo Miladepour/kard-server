@@ -1,6 +1,6 @@
 const BoardModel = require('../models/board')
-const ColumnModel = require('../models/board')
-const CardModel = require('../models/board')
+const ColumnModel = require('../models/column')
+const CardModel = require('../models/card')
 
 const storeController = {
   getAll: async (req,res, next) => {
