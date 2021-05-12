@@ -1,4 +1,5 @@
 const ColumnModel = require("../models/column");
+const BoardModel = require("../models/board");
 
 const ColumnsController = {
   getAll: async (req, res) => {
@@ -11,6 +12,8 @@ const ColumnsController = {
     res.json({foundColumns});
   },
 
+  getAllCardsByColumnID: () => {},
+
   createOneByBoardID: async (req, res) => {
     let ColumnsAlreadyInBoard = await ColumnModel.find({board: req.params.board_id});
     let numberOfColumnsAlreadyInBoard = ColumnsAlreadyInBoard.length;
@@ -19,7 +22,12 @@ const ColumnsController = {
     newColumn.board = req.params.board_id; 
     newColumn.order = order;
     await newColumn.save();
-    res.json({ newColumn });
+
+    let associatedBoard = await BoardModel.find({_id: req.params.board_id});
+    associatedBoard = associatedBoard["0"]
+    associatedBoard.columns.push(newColumn);
+    let finalUpdatedBoard = await associatedBoard.save();
+    res.json({ newColumn, finalUpdatedBoard });
   },
 
   deleteOneByID: async (req, res) => {

@@ -15,7 +15,11 @@ const columnSchema = new Schema({
     order: {
         type: Number,
         required: true
-    }
+    },
+    cards: [{
+      type: Schema.Types.ObjectId,
+      ref: 'card'
+    }]
 },
 {
     timestamps: true

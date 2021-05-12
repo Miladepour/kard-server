@@ -1,4 +1,5 @@
 const CardModel = require('../models/card')
+const ColumnModel = require('../models/column')
 
 const cardsController = {
   getAll: async (req,res) => {
@@ -24,7 +25,12 @@ const cardsController = {
     newCard.column = req.params.column_id; 
     newCard.order = order;
     await newCard.save();
-    res.json({ newCard });
+
+    let associatedColumn = await ColumnModel.find({_id: req.params.column_id});
+    associatedColumn = associatedColumn["0"]
+    associatedColumn.cards.push(newCard);
+    let finalUpdatedColumn = await associatedColumn.save();
+    res.json({ newCard, finalUpdatedColumn });
   },
   
   deleteOneByID: async(req, res) => { 

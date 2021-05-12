@@ -23,7 +23,6 @@ var userSchema = new mongoose.Schema({
     email: {
         type: mongoose.SchemaTypes.Email
     },
-
     password: {
         type: String, 
         required: true,
