@@ -8,6 +8,7 @@ const boardsRouter = require('./routes/boards');
 const cardsRouter = require('./routes/cards');
 const columnsRouter = require('./routes/columns');
 const usersRouter = require('./routes/users');
+const storeRouter = require('./routes/store');
 
 // Use CORS to allow this Heroku-hosted API server to be queried from other domains
 app.use(cors());
@@ -21,6 +22,7 @@ app.use('/api/boards', boardsRouter);
 app.use('/api/cards', cardsRouter);
 app.use('/api/columns', columnsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/store', storeRouter);
 
 // export the app so that it can be called in bin>www
 module.exports = app;
