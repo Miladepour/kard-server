@@ -1,6 +1,7 @@
 const BoardModel = require("../models/board");
 const ColumnModel = require("../models/column");
 const CardModel = require("../models/card");
+const column = require("../models/column");
 
 
 
@@ -11,25 +12,37 @@ const storeController = {
     let userBoards = await BoardModel.find({user: token.user._id});
     let userBoardID = userBoards[0]._id.toString()
     let userBoardTitle = userBoards[0].name.toString()
-    let userBoardColumns = await ColumnModel.find({board: userBoardID})
-    // let userBoardColumnsFlat = userBoardColumns[0]
-    // let userBoardColumnIDs = []
-    // userBoardColumnsFlat.forEach(userBoardColumn => {
-    //   userBoardColumnIDs.push(userBoardColumn._id)
-    // })
+    let userBoardColumns = await ColumnModel.find({board: userBoardID}) // this is an array of objects
+    let userBoardColumnIDs = userBoardColumns.map (column => {
+      return column._id
+    })
+
+    const returnPromise = simplifiedColumnCards => { //a synchornous function that returns the promise
+      return Promise.resolve(simplifiedColumnCards)
+    }
+
+    const findCardsForColumn = async (columnID) => {
+      let columnCards = await CardModel.find({column: columnID});
+      return returnPromise(columnCards)
+    }
+
+
     
-    // const { _id } = userBoards[0]
 
-    res.json({
-      userID,
+    const getCards = async () => {
+      return Promise.all(userBoardColumnIDs.map(columnID => findCardsForColumn(columnID)))
+    }
 
+    let columns;
+
+    getCards().then(cards => {
+      columns = cards
+    }).then(() => {
+
+        res.json({
       data: {
-        columns: {
-
-        },
-        columnIds: [
-          userBoardColumns[0].forEach(column => {console.log(column)})
-        ],
+        columns: columns,
+        columnIds: userBoardColumnIDs, // this is an array
         boards: {
           [userBoardID]: {
             id: userBoardID,
@@ -42,6 +55,11 @@ const storeController = {
         }
       },
     });
+    
+    })
+    
+
+
   },
 };
 
