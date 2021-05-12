@@ -8,9 +8,14 @@ const storeController = {
   getAll: async (req, res, next) => {
     const token = res.locals.decoded;
     const userID = token.user._id;
+    let userBoards = await BoardModel.find({user: token.user._id});
+    let userBoardID = userBoards[0]._id
+    
+    // const { _id } = userBoards[0]
 
     res.json({
-      userID: userID,
+      userID,
+
       data: {
         columns: {
 
@@ -19,7 +24,9 @@ const storeController = {
 
         ],
         boards: {
-
+          [userBoardID]: {
+            
+          }
         }
       },
     });
