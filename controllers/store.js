@@ -9,7 +9,9 @@ const storeController = {
     const token = res.locals.decoded;
     const userID = token.user._id;
     let userBoards = await BoardModel.find({user: token.user._id});
-    let userBoardID = userBoards[0]._id
+    let userBoardID = userBoards[0]._id.toString()
+    let userBoardTitle = userBoards[0].name.toString()
+    let userBoardColumns = await ColumnModel.find({board: userBoardID})
     
     // const { _id } = userBoards[0]
 
@@ -21,12 +23,17 @@ const storeController = {
 
         },
         columnIds: [
-
+          userBoardColumns
         ],
         boards: {
           [userBoardID]: {
-            
-          }
+            id: userBoardID,
+            title: userBoardTitle,
+            column: []
+          },
+          boardIds: [
+            userBoardID
+          ]
         }
       },
     });
