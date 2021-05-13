@@ -10,6 +10,7 @@ const boardsController = {
     const token = res.locals.decoded;
     console.log(token)
     let userBoards = await BoardModel.find({user: token.user._id});
+    userBoards = userBoards[0];
     res.json({userBoards});
   },
   

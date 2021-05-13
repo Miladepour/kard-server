@@ -1,7 +1,6 @@
 const BoardModel = require("../models/board");
 const ColumnModel = require("../models/column");
 const CardModel = require("../models/card");
-const column = require("../models/column");
 
 const storeController = {
   getAll: async (req, res, next) => {
@@ -9,8 +8,7 @@ const storeController = {
     const userID = token.user._id;
     let userBoards = await BoardModel.find({ user: token.user._id });
     let userBoardID = userBoards[0]._id.toString();
-    let userBoardTitle = userBoards[0].name.toString();
-    let userBoardColumns = await ColumnModel.find({ board: userBoardID }); // this is an array of objects
+    let userBoardColumns = await ColumnModel.find({ board: userBoardID }).populate('cards'); // this is an array of objects
     let userBoardColumnIDs = userBoardColumns.map((column) => {
       return column._id;
     });

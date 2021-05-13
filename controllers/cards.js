@@ -26,11 +26,11 @@ const cardsController = {
     newCard.order = order;
     await newCard.save();
 
-    let associatedColumn = await ColumnModel.find({_id: req.params.column_id});
+    let associatedColumn = await ColumnModel.find({_id: req.params.column_id}).populate('cards');
     associatedColumn = associatedColumn["0"]
     associatedColumn.cards.push(newCard);
     let finalUpdatedColumn = await associatedColumn.save();
-    res.json({ newCard, finalUpdatedColumn });
+    res.json({ finalUpdatedColumn });
   },
   
   deleteOneByID: async(req, res) => { 
