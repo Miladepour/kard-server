@@ -4,7 +4,6 @@ const CardModel = require("../models/card");
 const column = require("../models/column");
 
 const storeController = {
-
   getAll: async (req, res, next) => {
     const token = res.locals.decoded;
     const userID = token.user._id;
@@ -15,31 +14,40 @@ const storeController = {
     let userBoardColumnIDs = userBoardColumns.map((column) => {
       return column._id;
     });
-    let columns = {}
+    let columns = {};
     userBoardColumns.map((column) => {
       columns[[column._id]] = {
-      id: column._id,
-      title: column.name,
-      cards: column.cards
-      }
+        id: column._id,
+        title: column.name,
+        cards: column.cards,
+      };
     });
 
-
+    // TODO: This is how it should look ...
     res.json({
       data: {
-        columns,
-        columnIds: userBoardColumnIDs, // this is an array
-        boards: {
-          [userBoardID]: {
-            id: userBoardID,
-            title: userBoardTitle,
-            column: [],
-          },
-          boardIds: [userBoardID],
-        },
+        columns: userBoardColumns,
+        columnIds: userBoardColumnIDs,
+        boards: userBoards,
       },
     });
-  }
+
+    // 👹
+    // res.json({
+    //   data: {
+    //     columns,
+    //     columnIds: userBoardColumnIDs, // this is an array
+    //     boards: {
+    //       [userBoardID]: {
+    //         id: userBoardID,
+    //         title: userBoardTitle,
+    //         column: [],
+    //       },
+    //       boardIds: [userBoardID],
+    //     },
+    //   },
+    // });
+  },
 };
 
 module.exports = storeController;
