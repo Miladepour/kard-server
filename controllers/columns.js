@@ -8,23 +8,26 @@ const ColumnsController = {
   },
 
   getAllByBoardID: async (req, res) => {
-    let foundColumns = await ColumnModel.find({column: req.params.column_id});
-    res.json({foundColumns});
+    let foundColumns = await ColumnModel.find({ column: req.params.column_id });
+    res.json({ foundColumns });
   },
 
   getAllCardsByColumnID: () => {},
 
   createOneByBoardID: async (req, res) => {
-    let ColumnsAlreadyInBoard = await ColumnModel.find({board: req.params.board_id});
+    let ColumnsAlreadyInBoard = await ColumnModel.find({
+      board: req.params.board_id,
+    });
     let numberOfColumnsAlreadyInBoard = ColumnsAlreadyInBoard.length;
     let order = numberOfColumnsAlreadyInBoard + 1;
+    console.log(req.body);
     let newColumn = new ColumnModel(req.body);
-    newColumn.board = req.params.board_id; 
+    newColumn.board = req.params.board_id;
     newColumn.order = order;
     await newColumn.save();
 
-    let associatedBoard = await BoardModel.find({_id: req.params.board_id});
-    associatedBoard = associatedBoard["0"]
+    let associatedBoard = await BoardModel.find({ _id: req.params.board_id });
+    associatedBoard = associatedBoard["0"];
     associatedBoard.columns.push(newColumn);
     let finalUpdatedBoard = await associatedBoard.save();
     res.json({ newColumn, finalUpdatedBoard });
@@ -32,7 +35,8 @@ const ColumnsController = {
 
   deleteOneByID: async (req, res) => {
     const { column_id } = req.params;
-    ColumnModel.findByIdAndDelete(column_id, () => { //Deletes by Id name and has a callback function to send response code and message
+    ColumnModel.findByIdAndDelete(column_id, () => {
+      //Deletes by Id name and has a callback function to send response code and message
       res.status(200).send(`${column_id} was deleted`);
     });
   },
