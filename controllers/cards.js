@@ -73,6 +73,34 @@ const cardsController = {
     }).catch((error) => {
         res.status(500).send(error);
     })
+  },
+
+  changeColumnByID: async(req, res) => {
+    // {new: true} gets us back the updated version of the document rather than the info prior to making the change
+    let cardID = req.params.card_id
+
+    // delete ref from old column
+    let cardColumn = await ColumnModel.find({cards: cardID})
+    cardColumn = cardColumn[0]
+    let cardColumnAllCards = cardColumn.cards // array of all cards within column record, including one to be deleted
+    let cardColumnCardsMinusCardToDelete = cardColumnAllCards.filter(e => e.toString() !== cardID.toString())
+    cardColumn.cards = cardColumnCardsMinusCardToDelete
+    await cardColumn.save()
+
+    // insert ref into new column
+    let newCardColumnID = req.body.column
+    let newCardColumn = await ColumnModel.find({id: newCardColumnID})
+
+
+    CardModel.findByIdAndUpdate(cardID, req.body, {new: true}).then((card) => { 
+      console.log(card)
+       if (!card) {
+            return res.status(404).send();
+        }
+        res.send(card);
+    }).catch((error) => {
+        res.status(500).send(error);
+    })
   }
 };
 

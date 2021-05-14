@@ -41,4 +41,7 @@ protectedRouter.delete('/:card_id', cardsController.deleteOneByID);
 // Change a card attributes by id (content passed in req.body - could be any/all of columnID, name, order)
 router.patch('/:card_id', cardsController.changeNameByID);
 
+// Change a card attributes by id (content passed in req.body - could be any/all of columnID, name, order)
+router.patch('column/:card_id', cardsController.changeColumnByID);
+
 module.exports = router;
