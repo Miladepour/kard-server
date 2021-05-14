@@ -37,7 +37,7 @@ const ColumnsController = {
     const { column_id } = req.params;
     ColumnModel.findByIdAndDelete(column_id, () => {
       //Deletes by Id name and has a callback function to send response code and message
-      res.status(200).send(`${column_id} was deleted`);
+      res.json({column_id});
     });
   },
 

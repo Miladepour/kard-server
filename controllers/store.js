@@ -6,7 +6,9 @@ const storeController = {
   getAll: async (req, res, next) => {
     const token = res.locals.decoded;
     const userID = token.user._id;
-    let userBoards = await BoardModel.find({ user: token.user._id });
+    console.log(userID);
+    let userBoards = await BoardModel.find({ user: userID });
+    console.log(userBoards);
     let userBoardID = userBoards[0]._id.toString();
     let userBoardColumns = await ColumnModel.find({ board: userBoardID }).populate('cards'); // this is an array of objects
     let userBoardColumnIDs = userBoardColumns.map((column) => {

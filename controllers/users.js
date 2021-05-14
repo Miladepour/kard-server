@@ -1,5 +1,7 @@
 // const { json } = require('express');
 const UserModel = require('../models/user.js');
+const BoardModel = require('../models/board.js');
+const ColumnModel = require('../models/column.js');
 const bcrypt = require('bcrypt');
 //used for getting a token for unique login etc
 const jwt = require('jsonwebtoken');
@@ -17,15 +19,35 @@ const usersController = {
       }
     
     try {
-    const user = await UserModel.create({
+    let user = new UserModel({
         firstName,
         lastName,
         email,
         password
     });
+
+    let newBoard = new BoardModel({
+      name: "Default Board (created automatically)",
+      user: user.id
+    });
+
+    let newColumn = new ColumnModel({
+      name: "Your First Column",
+      board: newBoard.id,
+      order: 1 
+      // doing this via API has some more intelligent logic, but since we're just creating one to 
+      // get a user up and running, the first card will always be order: 1 in the list
+    });
+
+    newBoard.columns.push(newColumn)
+
+    user.save();
+    newBoard.save();
+    newColumn.save();
+
     console.log(user);
     res.status(201).end(); // doesn't need anything back except to know successful
-  } catch {
+    } catch {
     res.status(500).json({
       message: "Unforeseen exception or internal server error"
     });

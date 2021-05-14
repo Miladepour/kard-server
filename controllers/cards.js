@@ -34,9 +34,11 @@ const cardsController = {
   },
   
   deleteOneByID: async(req, res) => { 
-    CardModel.findByIdAndDelete(req.params.card_id).then((card) => {
+    let cardID = req.params.card_id
+    let cardColumn = await ColumnModel.find({cards: cardID})
+    await CardModel.findByIdAndDelete(cardID).then((card) => {
       if (!card) {
-        return res.status(404).send();
+        return res.json({deletedCardID: cardID, finalUpdatedColumn: cardColumn[0]});
       }
       res.send(card);
     }).catch((error) => {
